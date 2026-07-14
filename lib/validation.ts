@@ -22,8 +22,6 @@ export const orderRequestSchema = z.object({
   details: z.string().trim().max(1500).optional().or(z.literal("")),
   model_ref: optionalStr,
   model_name: optionalStr,
-  // Honeypot — must stay empty (anti-spam).
-  company: z.string().max(0).optional(),
 });
 
 export type OrderRequestInput = z.infer<typeof orderRequestSchema>;

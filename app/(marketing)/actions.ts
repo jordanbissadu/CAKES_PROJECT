@@ -22,18 +22,24 @@ export async function createOrderRequest(
   _prev: OrderFormState,
   formData: FormData,
 ): Promise<OrderFormState> {
+  // Coerce every field to a string — formData.get() returns null for absent
+  // fields, which the schema (string | "") would otherwise reject.
+  const s = (key: string): string => {
+    const v = formData.get(key);
+    return typeof v === "string" ? v : "";
+  };
+
   const parsed = orderRequestSchema.safeParse({
-    customer_name: formData.get("customer_name"),
-    customer_phone: formData.get("customer_phone"),
-    order_type: formData.get("order_type"),
-    fulfillment_date: formData.get("fulfillment_date"),
-    cake_message: formData.get("cake_message"),
-    sucre: formData.get("sucre"),
-    creme: formData.get("creme"),
-    details: formData.get("details"),
-    model_ref: formData.get("model_ref"),
-    model_name: formData.get("model_name"),
-    company: formData.get("company"), // honeypot
+    customer_name: s("customer_name"),
+    customer_phone: s("customer_phone"),
+    order_type: s("order_type"),
+    fulfillment_date: s("fulfillment_date"),
+    cake_message: s("cake_message"),
+    sucre: s("sucre"),
+    creme: s("creme"),
+    details: s("details"),
+    model_ref: s("model_ref"),
+    model_name: s("model_name"),
   });
 
   if (!parsed.success) {
@@ -50,11 +56,6 @@ export async function createOrderRequest(
   }
 
   const d = parsed.data;
-
-  // Honeypot filled → silently pretend success (bot).
-  if (d.company) {
-    return { status: "success", message: "Merci !", customerName: d.customer_name };
-  }
 
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||

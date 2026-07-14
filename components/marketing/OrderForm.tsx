@@ -73,16 +73,6 @@ export function OrderForm() {
       className="flex flex-col gap-3.5 rounded-[22px] bg-blanc p-7"
       aria-label="Demande de commande"
     >
-      {/* Honeypot */}
-      <input
-        type="text"
-        name="company"
-        tabIndex={-1}
-        autoComplete="off"
-        aria-hidden="true"
-        className="absolute left-[-9999px] h-0 w-0 opacity-0"
-      />
-
       {/* Selected model chip */}
       {selectedModel ? (
         <div className="flex items-center gap-3 rounded-input border-[1.5px] border-rose-bonbon bg-[#FEEAF0] px-3 py-2.5">
@@ -147,6 +137,11 @@ export function OrderForm() {
             required
             className={controlCls}
           />
+          {state.fieldErrors?.customer_phone ? (
+            <span className="text-[13px] font-semibold text-framboise">
+              {state.fieldErrors.customer_phone}
+            </span>
+          ) : null}
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="f-date" className={labelCls}>
