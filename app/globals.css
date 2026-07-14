@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  IDI's Cakes — design tokens
+  Source of truth: "IDIs-Cakes-Design-System.md" + _ds/tokens/*.css from the mockups.
+  Fonts are provided as CSS variables by next/font (--font-display, --font-body).
+*/
+:root {
+  /* ---- Base palette (extracted from the logo) ---- */
+  --vin: #641d34; /* Primary — strong titles, borders, footer, brand text */
+  --prune: #8f3c5a; /* Secondary — subtitles, links, icons */
+  --rose-mauve: #b15272; /* Accent — hovers, pills, secondary buttons */
+  --framboise: #d6335b; /* CTA / action */
+  --rose-bonbon: #fec9d3; /* Soft accent — section backgrounds, badges */
+  --creme: #faeed6; /* Warm neutral — cards, alternating blocks */
+  --blush: #fff7fa; /* Main page background */
+  --texte: #3a1420; /* Body text */
+  --texte-doux: #7a5560; /* Secondary text, captions */
+  --blanc: #ffffff; /* Surface — cards on blush */
+
+  /* ---- Derived tints ---- */
+  --rose-bonbon-clair: #fff0f3;
+
+  /* ---- Status colors (dashboard) ---- */
+  --statut-prete: #2e7150;
+  --statut-prete-dot: #3f9e6a;
+  --statut-prete-bg: #e7f4ec;
+  --statut-prep: #8a5a00;
+  --statut-prep-dot: #b4801a;
+  --statut-prep-bg: #faeed6;
+
+  /* ---- Elevation (rose-tinted, never grey) ---- */
+  --shadow-card: 0 8px 24px rgba(100, 29, 52, 0.08);
+  --shadow-hover: 0 12px 32px rgba(100, 29, 52, 0.14);
+  --shadow-nav: 0 2px 12px rgba(100, 29, 52, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(143, 60, 90, 0.25);
+
+  /* ---- Motion ---- */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --lift: -3px;
+
+  /* ---- Radii ---- */
+  --radius-pill: 999px;
+  --radius-card: 20px;
+  --radius-image: 16px;
+  --radius-input: 12px;
+
+  /* ---- Layout ---- */
+  --container-max: 1120px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--blush);
+  color: var(--texte);
+  font-family: var(--font-body), "Nunito Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Accessible focus ring — never removed (DS §8.4) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--rose-mauve);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Rose-tinted scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--rose-bonbon);
+  border-radius: 999px;
+  border: 3px solid var(--blush);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Keyframes reused across surfaces */
+@keyframes idiFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes idiSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes idiTwinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+@keyframes idiSlideIn {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes idiFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes idiPop {
+  from {
+    transform: translateY(14px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes idiToast {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes idiRise {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
