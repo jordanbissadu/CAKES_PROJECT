@@ -18,7 +18,7 @@ const labelCls = "text-[13px] font-bold text-texte";
 const controlCls =
   "w-full rounded-input border-[1.5px] border-rose-bonbon bg-blush px-3.5 py-3 text-base text-texte outline-none focus:border-prune";
 
-function SubmitButton() {
+function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
     <button
@@ -26,15 +26,24 @@ function SubmitButton() {
       disabled={pending}
       className="mt-1 rounded-pill bg-framboise px-6 py-3.5 text-base font-bold text-white shadow-[0_5px_16px_rgba(214,51,91,.22)] transition-all duration-200 ease-soft hover:-translate-y-0.5 hover:bg-vin disabled:opacity-50"
     >
-      {pending ? "Envoi…" : "Envoyer ma demande"}
+      {pending ? "Envoi…" : label}
     </button>
   );
 }
 
 export function OrderForm() {
   const [state, formAction] = useFormState(createOrderRequest, initial);
-  const { selectedModel, orderType, details, clearModel, setOrderType, setDetails } =
-    useOrderModel();
+  const {
+    selectedModel,
+    selectedDivers,
+    orderType,
+    details,
+    clearModel,
+    setOrderType,
+    setDetails,
+  } = useOrderModel();
+
+  const isDivers = selectedDivers !== null;
 
   if (state.status === "success") {
     return (
@@ -46,7 +55,7 @@ export function OrderForm() {
           </h3>
           <p className="text-[15px] leading-relaxed text-texte-doux">
             On a bien reçu ta demande. On te rappelle très vite au numéro
-            indiqué pour confirmer ton gâteau.
+            indiqué pour confirmer ta commande.
             {state.orderNumber ? (
               <>
                 {" "}
@@ -73,7 +82,7 @@ export function OrderForm() {
       className="flex flex-col gap-3.5 rounded-[22px] bg-blanc p-7"
       aria-label="Demande de commande"
     >
-      {/* Selected model chip */}
+      {/* Selected cake model chip */}
       {selectedModel ? (
         <div className="flex items-center gap-3 rounded-input border-[1.5px] border-rose-bonbon bg-[#FEEAF0] px-3 py-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -98,9 +107,38 @@ export function OrderForm() {
         </div>
       ) : null}
 
-      {/* Hidden model fields */}
-      <input type="hidden" name="model_ref" value={selectedModel?.ref ?? ""} />
-      <input type="hidden" name="model_name" value={selectedModel?.name ?? ""} />
+      {/* Selected "divers" item chip */}
+      {selectedDivers ? (
+        <div className="flex items-center gap-3 rounded-input border-[1.5px] border-rose-bonbon bg-[#FEEAF0] px-3 py-2.5">
+          <span className="grid h-[46px] w-[46px] flex-none place-items-center rounded-[10px] bg-creme text-2xl">
+            🍽️
+          </span>
+          <div className="flex-1 text-[13px] leading-tight text-prune">
+            Article choisi : <b className="text-vin">{selectedDivers.name}</b>
+            <br />
+            <span className="text-[#B79AA4]">{selectedDivers.price}</span>
+          </div>
+          <button
+            type="button"
+            onClick={clearModel}
+            aria-label="Retirer l'article"
+            className="border-0 bg-none px-1 text-[22px] leading-none text-rose-mauve"
+          >
+            ×
+          </button>
+        </div>
+      ) : null}
+
+      {/* Hidden fields — differ by order kind */}
+      <input type="hidden" name="order_kind" value={isDivers ? "divers" : "cake"} />
+      {isDivers ? (
+        <input type="hidden" name="order_type" value={selectedDivers.name} />
+      ) : (
+        <>
+          <input type="hidden" name="model_ref" value={selectedModel?.ref ?? ""} />
+          <input type="hidden" name="model_name" value={selectedModel?.name ?? ""} />
+        </>
+      )}
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="f-nom" className={labelCls}>
@@ -156,58 +194,81 @@ export function OrderForm() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="f-type" className={labelCls}>
-          Type de gâteau
-        </label>
-        <select
-          id="f-type"
-          name="order_type"
-          value={orderType}
-          onChange={(e) => setOrderType(e.target.value)}
-          className={controlCls}
-        >
-          {ORDER_TYPES.map((t) => (
-            <option key={t}>{t}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="f-message-cake" className={labelCls}>
-          Nom / message à écrire sur le gâteau
-        </label>
-        <input
-          id="f-message-cake"
-          name="cake_message"
-          type="text"
-          placeholder="Ex. Joyeux anniversaire Lina 🎂"
-          className={controlCls}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-3.5 min-[520px]:grid-cols-2">
+      {isDivers ? (
+        /* --- Divers: quantity only --- */
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="f-sucre" className={labelCls}>
-            Niveau de sucre
+          <label htmlFor="f-qty" className={labelCls}>
+            Quantité
           </label>
-          <select id="f-sucre" name="sucre" className={controlCls}>
-            {SUCRE_OPTIONS.map((o) => (
-              <option key={o}>{o}</option>
-            ))}
-          </select>
+          <input
+            id="f-qty"
+            name="quantity"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={1000}
+            defaultValue={1}
+            required
+            className={controlCls}
+          />
         </div>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="f-creme" className={labelCls}>
-            Type de crème
-          </label>
-          <select id="f-creme" name="creme" className={controlCls}>
-            {CREME_OPTIONS.map((o) => (
-              <option key={o}>{o}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      ) : (
+        /* --- Cake: type, message, sugar, cream --- */
+        <>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="f-type" className={labelCls}>
+              Type de gâteau
+            </label>
+            <select
+              id="f-type"
+              name="order_type"
+              value={orderType}
+              onChange={(e) => setOrderType(e.target.value)}
+              className={controlCls}
+            >
+              {ORDER_TYPES.map((t) => (
+                <option key={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="f-message-cake" className={labelCls}>
+              Nom / message à écrire sur le gâteau
+            </label>
+            <input
+              id="f-message-cake"
+              name="cake_message"
+              type="text"
+              placeholder="Ex. Joyeux anniversaire Lina 🎂"
+              className={controlCls}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-3.5 min-[520px]:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="f-sucre" className={labelCls}>
+                Niveau de sucre
+              </label>
+              <select id="f-sucre" name="sucre" className={controlCls}>
+                {SUCRE_OPTIONS.map((o) => (
+                  <option key={o}>{o}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="f-creme" className={labelCls}>
+                Type de crème
+              </label>
+              <select id="f-creme" name="creme" className={controlCls}>
+                {CREME_OPTIONS.map((o) => (
+                  <option key={o}>{o}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="f-msg" className={labelCls}>
@@ -218,7 +279,11 @@ export function OrderForm() {
           name="details"
           value={details}
           onChange={(e) => setDetails(e.target.value)}
-          placeholder="Nombre de parts, saveurs, décoration, couleurs…"
+          placeholder={
+            isDivers
+              ? "Précisions, allergies, heure de retrait…"
+              : "Nombre de parts, saveurs, décoration, couleurs…"
+          }
           className={`${controlCls} min-h-[78px] resize-y`}
         />
       </div>
@@ -227,7 +292,7 @@ export function OrderForm() {
         <p className="text-[14px] font-semibold text-framboise">{state.message}</p>
       ) : null}
 
-      <SubmitButton />
+      <SubmitButton label={isDivers ? "Envoyer ma commande" : "Envoyer ma demande"} />
     </form>
   );
 }

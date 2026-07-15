@@ -40,6 +40,8 @@ export async function createOrderRequest(
     details: s("details"),
     model_ref: s("model_ref"),
     model_name: s("model_name"),
+    order_kind: s("order_kind") || undefined,
+    quantity: s("quantity"),
   });
 
   if (!parsed.success) {
@@ -68,14 +70,31 @@ export async function createOrderRequest(
     };
   }
 
-  // Compose a readable customization message for the workshop.
+  // Compose a readable order line + customization message for the workshop.
+  // "divers" orders (samoussa, mini pizza…) are ordered by quantity and skip
+  // the cake-only fields (sugar, cream, message-on-cake, model).
+  const isDivers = d.order_kind === "divers";
+  const qty = typeof d.quantity === "number" ? d.quantity : null;
+
   const parts: string[] = [];
-  if (d.cake_message) parts.push(`À écrire : ${d.cake_message}`);
-  if (d.sucre) parts.push(`Sucre : ${d.sucre}`);
-  if (d.creme) parts.push(`Crème : ${d.creme}`);
-  if (d.model_name)
-    parts.push(`Modèle : ${d.model_name}${d.model_ref ? ` (réf. ${d.model_ref})` : ""}`);
-  if (d.details) parts.push(d.details);
+  let cakeName: string;
+  let cakeSub: string;
+
+  if (isDivers) {
+    cakeName = qty ? `${qty} × ${d.order_type}` : d.order_type;
+    cakeSub = "Divers";
+    if (qty) parts.push(`Quantité : ${qty}`);
+    if (d.details) parts.push(d.details);
+  } else {
+    cakeName = d.model_name || d.order_type;
+    cakeSub = d.model_name ? d.order_type : "Sur mesure";
+    if (d.cake_message) parts.push(`À écrire : ${d.cake_message}`);
+    if (d.sucre) parts.push(`Sucre : ${d.sucre}`);
+    if (d.creme) parts.push(`Crème : ${d.creme}`);
+    if (d.model_name)
+      parts.push(`Modèle : ${d.model_name}${d.model_ref ? ` (réf. ${d.model_ref})` : ""}`);
+    if (d.details) parts.push(d.details);
+  }
   const message = parts.join("\n") || null;
 
   try {
@@ -85,8 +104,8 @@ export async function createOrderRequest(
       .insert({
         customer_name: d.customer_name,
         customer_phone: d.customer_phone,
-        cake: d.model_name || d.order_type,
-        cake_sub: d.model_name ? d.order_type : "Sur mesure",
+        cake: cakeName,
+        cake_sub: cakeSub,
         fulfillment_date: d.fulfillment_date || null,
         message,
         status: "nouvelle",
@@ -112,7 +131,7 @@ export async function createOrderRequest(
           orderNumber: inserted?.order_number ?? "—",
           customerName: d.customer_name,
           customerPhone: d.customer_phone,
-          cake: d.model_name || d.order_type,
+          cake: cakeName,
           fulfillmentDate: d.fulfillment_date || null,
           message,
         },

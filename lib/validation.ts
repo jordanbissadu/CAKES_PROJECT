@@ -22,6 +22,11 @@ export const orderRequestSchema = z.object({
   details: z.string().trim().max(1500).optional().or(z.literal("")),
   model_ref: optionalStr,
   model_name: optionalStr,
+  // "divers" = petites gourmandises (samoussa, mini pizza…) commandées à la quantité.
+  order_kind: z.enum(["cake", "divers"]).optional(),
+  quantity: z
+    .union([z.coerce.number().int().min(1).max(1000), z.literal("")])
+    .optional(),
 });
 
 export type OrderRequestInput = z.infer<typeof orderRequestSchema>;

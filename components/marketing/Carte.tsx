@@ -1,4 +1,5 @@
 import { MENU_CAKES, MENU_DIVERS } from "@/lib/gallery";
+import { DiversRow } from "./DiversRow";
 
 function Row({
   name,
@@ -59,7 +60,7 @@ export function Carte() {
             Divers
           </h3>
           {MENU_DIVERS.map((m) => (
-            <Row key={m.name} name={m.name} price={m.price} />
+            <DiversRow key={m.name} name={m.name} price={m.price} />
           ))}
         </aside>
       </div>
