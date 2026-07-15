@@ -50,6 +50,12 @@ export const GALLERY: GalleryCake[] = [
   { img: "/cakes/cake-33.jpeg", name: "Pièce montée feuille d'or", tag: "Pièce montée", cream: "Crème au beurre", sweet: "Normal", price: "dès 30 000F", ref: "N°33", otype: "Pièce montée" },
   { img: "/cakes/cake-34.jpeg", name: "Gâteau vanille perlé", tag: "Anniversaire", cream: "Chantilly", sweet: "Normal", price: "dès 8 000F", ref: "N°34", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
   { img: "/cakes/cake-35.jpeg", name: "Gâteau ganache chocolat", tag: "Anniversaire", cream: "Ganache + chantilly", sweet: "Intense", price: "dès 9 000F", ref: "N°35", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
+  { img: "/cakes/cake-36.jpeg", name: "Gâteau crème & feuille d'or", tag: "Anniversaire", cream: "Chantilly + perles", sweet: "Normal", price: "dès 9 000F", ref: "N°36", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
+  { img: "/cakes/cake-37.jpeg", name: "Gâteau haut « Our Dad » à plaques", tag: "Anniversaire", cream: "Crème au beurre", sweet: "Normal", price: "dès 15 000F", ref: "N°37", otype: "Sur mesure" },
+  { img: "/cakes/cake-38.jpeg", name: "Forêt noire copeaux chocolat", tag: "Anniversaire", cream: "Chantilly + copeaux choco", sweet: "Normal", price: "dès 9 000F", ref: "N°38", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
+  { img: "/cakes/cake-39.jpeg", name: "Gâteau pivoine rose & perles", tag: "Anniversaire", cream: "Crème au beurre", sweet: "Normal", price: "dès 10 000F", ref: "N°39", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
+  { img: "/cakes/cake-40.jpeg", name: "Gâteau rose fuchsia & or", tag: "Anniversaire", cream: "Crème au beurre", sweet: "Normal", price: "dès 10 000F", ref: "N°40", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
+  { img: "/cakes/cake-41.jpeg", name: "Gâteau chocolat & crème perlée", tag: "Anniversaire", cream: "Ganache + chantilly", sweet: "Intense", price: "dès 9 000F", ref: "N°41", otype: "Gâteau anniversaire (6 / 10 / 12 parts)" },
 ];
 
 export const MENU_CAKES = [
