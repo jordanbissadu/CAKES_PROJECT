@@ -24,7 +24,8 @@ export function Nav({ settings }: { settings: Settings }) {
   }, [open]);
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-vin/10 bg-blush/85 backdrop-blur-md">
+    <>
+      <nav className="sticky top-0 z-40 border-b border-vin/10 bg-blush/85 backdrop-blur-md">
       <div className="mx-auto flex h-[64px] max-w-container items-center justify-between px-5 nav:h-[74px] nav:px-6">
         <a
           href="/"
@@ -83,9 +84,10 @@ export function Nav({ settings }: { settings: Settings }) {
           </button>
         </div>
       </div>
+      </nav>
 
       {open ? (
-        <div className="fixed inset-0 z-50 flex flex-col bg-blush nav:hidden">
+        <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-blush nav:hidden">
           <div className="flex h-[64px] items-center justify-between px-5">
             <span className="font-display text-[22px] font-bold text-vin">
               IDI&apos;s Cakes
@@ -122,6 +124,6 @@ export function Nav({ settings }: { settings: Settings }) {
           </div>
         </div>
       ) : null}
-    </nav>
+    </>
   );
 }
