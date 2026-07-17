@@ -93,14 +93,6 @@ export function Hero({ settings }: { settings: Settings }) {
         </div>
       </div>
 
-      <div
-        className="absolute bottom-8 right-8 z-[2] rounded-image bg-white px-[18px] py-3 shadow-[0_12px_32px_rgba(52,13,26,.35)] motion-safe:[animation:idiFloat_5s_ease-in-out_infinite]"
-      >
-        <small className="block text-[11px] font-semibold text-texte-doux">
-          Gâteau anniversaire
-        </small>
-        <b className="font-display text-lg text-vin">dès 6 000F</b>
-      </div>
       <span className="absolute right-[34px] top-24 z-[2] rotate-6 rounded-pill bg-framboise px-3.5 py-1.5 text-xs font-bold text-white shadow-[0_6px_16px_rgba(214,51,91,.4)]">
         Nouveau ✦
       </span>

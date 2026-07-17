@@ -88,10 +88,7 @@ export function Gallery() {
               🍬 {cake.sweet}
             </span>
           </div>
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-4">
-            <span className="font-display text-[26px] font-bold text-vin">
-              {cake.price}
-            </span>
+          <div className="mt-auto flex flex-wrap items-center justify-end gap-4">
             <button
               onClick={() => selectCake(cake)}
               className="rounded-pill bg-framboise px-6 py-3.5 text-base font-bold text-white shadow-[0_6px_18px_rgba(214,51,91,.24)] transition-all duration-200 ease-soft hover:-translate-y-0.5 hover:bg-vin"
