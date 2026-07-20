@@ -85,7 +85,10 @@ export function OrderDetailDrawer({
               {digits(order.customer_phone).length >= 6 ? (
                 <div className="mt-3 flex gap-2">
                   <a
-                    href={whatsappLink(order)}
+                    href={whatsappLink(
+                      order,
+                      typeof window !== "undefined" ? window.location.origin : undefined,
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-pill bg-[#25D366] text-[14px] font-bold text-white no-underline"
