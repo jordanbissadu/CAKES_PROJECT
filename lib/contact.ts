@@ -16,7 +16,7 @@ export function orderWhatsappText(order: Order): string {
     case "annulee":
       return `${base} Au sujet de ta commande ${order.order_number}.`;
     default:
-      return `${base} On a bien reçu ta demande ${order.order_number} (${order.cake}). On confirme les détails avec toi.`;
+      return `${base} On a bien reçu ta demande ${order.order_number} (${order.cake}). On confirme les détails avec toi. 📝 Pense à bien noter ton numéro de commande ${order.order_number} : il te servira à suivre l'avancement de ta commande à tout moment. À très vite ! 🍰`;
   }
 }
 
