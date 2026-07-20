@@ -20,6 +20,7 @@ import {
   advanceOrder,
   cancelOrder,
   createOrder,
+  deleteOrder,
 } from "@/app/(dashboard)/actions";
 
 type View = "liste" | "preparation";
@@ -113,6 +114,15 @@ export function CommandesView({
 
   const onCancel = (o: Order) => {
     run(() => cancelOrder(o.id), `${o.order_number} annulée`);
+    setSelectedId(null);
+  };
+
+  const onDelete = (o: Order) => {
+    const ok = window.confirm(
+      `Supprimer définitivement la commande ${o.order_number} ?\nCette action est irréversible.`,
+    );
+    if (!ok) return;
+    run(() => deleteOrder(o.id), `${o.order_number} supprimée 🗑️`);
     setSelectedId(null);
   };
 
@@ -302,6 +312,7 @@ export function CommandesView({
         onClose={() => setSelectedId(null)}
         onAdvance={onAdvance}
         onCancel={onCancel}
+        onDelete={onDelete}
       />
 
       <NewOrderModal

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { newOrderSchema } from "@/lib/validation";
 import { nextStatus, type OrderStatus } from "@/lib/orders";
 
@@ -45,6 +46,22 @@ export async function cancelOrder(id: string): Promise<ActionResult> {
     .update({ status: "annulee" })
     .eq("id", id);
   if (error) return { ok: false, message: "Échec de l'annulation." };
+
+  revalidatePath("/dashboard/commandes");
+  return { ok: true };
+}
+
+/**
+ * Permanently delete an order. Irreversible — used for spam, test or
+ * mistaken orders. Auth is enforced in the app layer (requireUser); the
+ * delete itself uses the admin client so it doesn't depend on an RLS
+ * DELETE policy.
+ */
+export async function deleteOrder(id: string): Promise<ActionResult> {
+  await requireUser();
+  const admin = createAdminClient();
+  const { error } = await admin.from("orders").delete().eq("id", id);
+  if (error) return { ok: false, message: "Échec de la suppression." };
 
   revalidatePath("/dashboard/commandes");
   return { ok: true };

@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Check, MessageCircle, Phone } from "lucide-react";
+import { X, Check, MessageCircle, Phone, Trash2 } from "lucide-react";
 import type { Order } from "@/lib/orders";
 import { digits, whatsappLink } from "@/lib/contact";
 import {
@@ -25,6 +25,7 @@ export function OrderDetailDrawer({
   onClose,
   onAdvance,
   onCancel,
+  onDelete,
 }: {
   order: Order | null;
   today: Date;
@@ -33,6 +34,7 @@ export function OrderDetailDrawer({
   onClose: () => void;
   onAdvance?: (order: Order) => void;
   onCancel?: (order: Order) => void;
+  onDelete?: (order: Order) => void;
 }) {
   const currency = useCurrency();
   return (
@@ -162,7 +164,17 @@ export function OrderDetailDrawer({
 
           {/* Footer actions */}
           {readOnly ? null : (
-            <div className="flex flex-shrink-0 gap-2.5 border-t border-vin/10 bg-blanc px-6 py-4">
+            <div className="flex flex-shrink-0 items-center gap-2.5 border-t border-vin/10 bg-blanc px-6 py-4">
+              <button
+                type="button"
+                onClick={() => onDelete?.(order)}
+                disabled={pending}
+                aria-label="Supprimer définitivement la commande"
+                title="Supprimer définitivement"
+                className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-pill border-[1.5px] border-[#E7B9C4] bg-blanc text-[#C2425F] transition-colors hover:bg-[#FDECF0] disabled:opacity-50"
+              >
+                <Trash2 size={18} strokeWidth={2} />
+              </button>
               {canCancel(order.status) ? (
                 <Button
                   variant="outline"
