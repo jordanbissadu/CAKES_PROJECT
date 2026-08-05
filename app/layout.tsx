@@ -4,6 +4,7 @@ import { Fraunces, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 
 const GTM_ID = "GTM-TXPZ88NV";
+const GA4_ID = "G-L5M5XFP883";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -54,6 +55,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${GTM_ID}');`}
         </Script>
         {/* End Google Tag Manager */}
+
+        {/* Google tag (gtag.js) */}
+        <Script
+          id="ga4-loader"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-config" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '${GA4_ID}');`}
+        </Script>
+        {/* End Google tag (gtag.js) */}
 
         {children}
       </body>
